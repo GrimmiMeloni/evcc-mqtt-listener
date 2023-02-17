@@ -21,7 +21,7 @@ class Handler {
 
     constructor() {
         this.currentChargeMode = 'UNKNOWN';
-        this.currentChargeState = 'UNKNOWN';
+        this.currentChargeState = false;
         this.currentBatteryState = 'UNKNOWN';
     }
 
@@ -31,35 +31,40 @@ class Handler {
 
     setChargeMode(newMode) {
         if (this.currentChargeMode == newMode) {
-            logger.debug("skipping chargemode update, mode stays at %s", this.currentChargeMode);
+            logger.trace("skipping chargemode update, mode stays at %s", this.currentChargeMode);
             return; //NoOp
         }
 
-        logger.info("updating chargemode from %s to %s", this.currentChargeMode, newMode);
+        logger.debug("updating chargemode from %s to %s", this.currentChargeMode, newMode);
         this.currentChargeMode = newMode;
 
         this.update();
     }
 
-    setChargeState(newState) {
+    setCharging(newState) {
         if (this.currentChargeState == newState) {
-            logger.debug("skipping chargestate update, state stays at %s", this.currentChargeState);
+            logger.trace("skipping chargestate update, state stays at %s", this.currentChargeState);
             return; //NoOp
         }
 
-        logger.info("updating chargeState from %s to %s", this.currentChargeState, newState);
+        logger.debug("updating chargeState from %s to %s", this.currentChargeState, newState);
         this.currentChargeState = newState;
 
         this.update();
     }
 
+    isCharging() {
+        return this.currentChargeState;
+    }
+
+
     setBatteryState(newState) {
         if (this.currentBatteryState == newState) {
-            logger.debug("skipping Batterystate update, state stays at %s", this.currentBatteryState);
+            logger.trace("skipping Batterystate update, state stays at %s", this.currentBatteryState);
             return; //NoOp
         }
 
-        logger.info("updating BatteryState from %s to %s", this.currentBatteryState, newState);
+        logger.debug("updating BatteryState from %s to %s", this.currentBatteryState, newState);
         this.currentBatteryState = newState;
 
         this.updateTeslaAPI();
@@ -67,32 +72,28 @@ class Handler {
 
 
     update() {
-        if (this.currentChargeState == CHARGE_STATE.IDLE) {
+        if (! this.isCharging() ) {
+            logger.debug("charge mode is %s, setting battery to standby", this.currentChargeMode);
             this.setBatteryState(BATTERY_STATE.STANDBY);
             return;
         }
 
-        if (this.currentChargeState == CHARGE_STATE.CHARGING) {
-            switch (this.currentChargeMode) {
-                case MODE.MODE_OFF:
-                case MODE.MODE_PV:
-                    logger.debug("charge mode is %s, setting battery to standby");
-                    this.setBatteryState(BATTERY_STATE.STANDBY);
-                    break;
+        switch (this.currentChargeMode) {
+            case MODE.MODE_OFF:
+            case MODE.MODE_PV:
+                logger.debug("charge mode is %s, setting battery to standby", this.currentChargeMode);
+                this.setBatteryState(BATTERY_STATE.STANDBY);
+                break;
 
-                case MODE.MODE_MINPV:
-                case MODE.MODE_NOW:
-                    logger.debug("charge mode is %s, setting battery to backup only");
-                    setBatteryState(BATTERY_STATE.BACKUP);
-                    break;
-                default:
-                    logger.warn("ignoring unknown charge mode '%s'", this.currentChargeMode);
-            }
-            return;
+            case MODE.MODE_MINPV:
+            case MODE.MODE_NOW:
+                logger.debug("charge mode is %s, setting battery to backup only", this.currentChargeMode);
+                setBatteryState(BATTERY_STATE.BACKUP);
+                break;
+            default:
+                logger.warn("ignoring unknown charge mode '%s'", this.currentChargeMode);
+                break;
         }
-
-        logger.warn("ignoring unknown charge state '%s'", this.currentChargeState)
-
     }
 
     updateTeslaAPI() {
