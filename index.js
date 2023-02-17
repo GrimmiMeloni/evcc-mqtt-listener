@@ -6,4 +6,11 @@ const handler = new Handler();
 
 logger.debug('Starting....');
 
-mqtt.connect(handler);
+const client = mqtt.connect(handler);
+
+process.on('SIGINT', function () {
+    console.log('Got SIGINT.  Going to exit.');
+    //Your code to execute before process kill.
+    client.end();
+    process.kill(process.pid);
+});
