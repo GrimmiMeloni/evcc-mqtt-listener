@@ -1,0 +1,26 @@
+{
+  "name": "evcc-mqtt-listener",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GrimmiMeloni/evcc-mqtt-listener.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GrimmiMeloni/evcc-mqtt-listener/issues"
+  },
+  "homepage": "https://github.com/GrimmiMeloni/evcc-mqtt-listener#readme",
+  "dependencies": {
+    "mqtt": "^4.3.7",
+    "pino": "^8.10.0",
+    "pino-pretty": "^9.2.0"
+  }
+}
