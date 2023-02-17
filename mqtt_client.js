@@ -3,7 +3,7 @@ const mqtt = require('mqtt');
 const { logger } = require('./logger.js');
 const { mqtt_url, topicName } = require("./config");
 
-function connect() {
+function connect(handler) {
     const client = mqtt.connect(mqtt_url);
     
     // connect to same client and subscribe to same topic name  
@@ -20,7 +20,9 @@ function connect() {
     client.on('message', (topic, message, packet) => {
         logger.trace(packet);
         if (topic === topicName) {
-            logger.debug(packet.payload.toString());
+            let newMode =packet.payload.toString(); 
+            logger.debug(newMode);
+            handler.setChargeMode(newMode);
         }
     });
     client.on("packetsend", (packet) => {
