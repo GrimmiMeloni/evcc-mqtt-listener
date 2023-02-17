@@ -1,0 +1,17 @@
+{
+    "mqtt": {
+      "broker": {
+        "url": "mqtt://localhost:1883"
+      },
+      "topics": {
+        "charging": "evcc/loadpoints/1/charging",
+        "mode": "evcc/loadpoints/1/mode"
+      }
+    },
+    "tesla": {
+        "siteId" : "auto",
+        "pwId": "auto",
+        "refreshToken" : null,
+        "backupReservePercent": 20
+    }
+  }

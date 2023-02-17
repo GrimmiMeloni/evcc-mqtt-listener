@@ -1,3 +1,6 @@
+#Configuration with user specific values and secrets
+config/default.json
+
 # Logs
 logs
 *.log

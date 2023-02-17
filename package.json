@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/GrimmiMeloni/evcc-mqtt-listener#readme",
   "dependencies": {
+    "config": "^3.3.9",
     "mqtt": "^4.3.7",
     "pino": "^8.10.0",
     "pino-pretty": "^9.2.0"
