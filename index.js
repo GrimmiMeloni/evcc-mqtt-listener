@@ -1,14 +1,7 @@
 const mqtt = require('mqtt');
-const pino = require('pino');
 
-// const logger = pino();
-const logger = pino({
-    transport: {
-        target: 'pino-pretty'
-    }
-})
+const logger = require('./logger.js').logger;
 
-logger.level = 'debug';
 logger.debug('Starting....');
 
 const client = mqtt.connect("mqtt://192.168.3.46:1883");
