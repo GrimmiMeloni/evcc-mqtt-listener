@@ -9,4 +9,4 @@ const logger = pino({
 
 logger.level = 'debug';
 
-module.exports.logger = logger;
+exports.logger = logger;
