@@ -9,13 +9,13 @@ class TeslaAPI {
         this.accessToken = undefined;
     };
 
-    initialize() {
+    async initialize() {
         logger.info("TeslaAPI initializing");
         logger.debug('using siteId %s', this.siteId);
         logger.debug('using pwId %s', this.pwId);
         logger.debug('using refreshToken %s', this.refreshToken);
 
-        if (!this.checkAndRefreshAccessToken()) {
+        if (! await this.checkAndRefreshAccessToken()) {
             logger.error("Unable to fetch access token. See logs for details.");
             return false;
         };
@@ -39,15 +39,6 @@ class TeslaAPI {
         logger.debug('Body for Tesla: %s', body)
 
         const url = "https://auth.tesla.com/oauth2/v3/token"
-
-        // const myHeaders = new Headers();
-        // myHeaders.append('Content-Type', 'application/json; charset=utf-8');
-
-        // const request = new Request(url, {method: 'POST', headers: myHeaders, body: body});
-
-//        logger.debug("Request: %s", request.toJSON());
-
-        // const response = await fetch(request);
 
         const response = await fetch(url, {
             method: 'POST',
