@@ -19,10 +19,11 @@ const BATTERY_STATE = {
 
 class Handler {
 
-    constructor() {
+    constructor(teslaApi) {
         this.currentChargeMode = 'UNKNOWN';
         this.currentChargeState = false;
         this.currentBatteryState = 'UNKNOWN';
+        this.teslaApi = teslaApi;
     }
 
     toString() {
@@ -97,7 +98,18 @@ class Handler {
     }
 
     updateTeslaAPI() {
-        logger.warn("TESLA API update not implemented, yet");
+        logger.info("Updating TESLA API for Battery state: %s", this.currentBatteryState);
+        switch (this.currentBatteryState) {
+            case BATTERY_STATE.STANDBY:
+                this.teslaApi.setStandbyMode();
+                break;
+            case BATTERY_STATE.BACKUP:
+                this.teslaApi.setBackupOnlyMode();
+                break;
+            default:
+                logger.error("Unknown Battery state encountered while updating Tesla API");
+                break;
+        }
     }
 }
 

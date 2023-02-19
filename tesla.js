@@ -5,6 +5,7 @@ class TeslaAPI {
     constructor() {
         this.siteId = config.get('tesla.siteId');
         this.pwId = config.get('tesla.pwId');
+        this.brp = config.get('tesla.backupReservePercentage');
         this.refreshToken = config.get('tesla.refreshToken');
         this.accessToken = undefined;
     };
@@ -78,6 +79,44 @@ class TeslaAPI {
         logger.debug("Access Token is valid");
         return true;
     }
+    
+    async updateBatteryReservePercentage(targetPercentage) {
+        logger.info("Updating Battery reserve to %d%", targetPercentage);
+        
+        await this.checkAndRefreshAccessToken();
+        
+        let body = JSON.stringify({
+            backup_reserve_percent: targetPercentage
+        });
+        
+        logger.debug('Body for Tesla: %s', body)
+        
+        const url = "https://owner-api.teslamotors.com/api/1/energy_sites/" + this.siteId + "/backup";
+        
+        const response = await fetch(url, {
+            method: 'POST',
+            body: body,
+            headers: {
+                'content-type': 'application/json; charset=utf-8',
+                'Authorization': 'Bearer ' + this.accessToken
+            },
+        });
+        
+        const json = await response.json();
+        logger.debug('retrieved JSON from TeslaAPI: %s' , JSON.stringify(json));
+        const rc = json.response.code;
+        logger.debug("response code for battery percentage update is %d", rc);
+        
+        if (rc != 201) log.error ("Battery reserve perceentage update failed");
+    }
+    
+    setBackupOnlyMode() {
+        this.updateBatteryReservePercentage(100);
+    }
+    
+    setStandbyMode() {
+        this.updateBatteryReservePercentage(this.brp);
+    }
 }
-
+    
 exports.TeslaAPI = TeslaAPI;

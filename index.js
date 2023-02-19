@@ -16,7 +16,7 @@ async function app() {
     };
     
     logger.info ("TeslaAPI init complete. Connecting to MQTT.");
-    const handler = new Handler();
+    const handler = new Handler(teslaAPI);
     const client = mqtt.connect(handler);
 }
 
