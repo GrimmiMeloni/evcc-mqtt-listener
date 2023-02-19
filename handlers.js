@@ -72,8 +72,8 @@ class Handler {
 
 
     update() {
-        if (! this.isCharging() ) {
-            logger.debug("charge mode is %s, setting battery to standby", this.currentChargeMode);
+        if (this.isCharging() == false) {
+            logger.debug("charge state is %s, setting battery to standby", this.isCharging());
             this.setBatteryState(BATTERY_STATE.STANDBY);
             return;
         }
@@ -88,7 +88,7 @@ class Handler {
             case MODE.MODE_MINPV:
             case MODE.MODE_NOW:
                 logger.debug("charge mode is %s, setting battery to backup only", this.currentChargeMode);
-                setBatteryState(BATTERY_STATE.BACKUP);
+                this.setBatteryState(BATTERY_STATE.BACKUP);
                 break;
             default:
                 logger.warn("ignoring unknown charge mode '%s'", this.currentChargeMode);

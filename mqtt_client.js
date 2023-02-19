@@ -36,7 +36,7 @@ function connect(handler) {
         }
 
         if (topic === chargeStateTopic) {
-            let newState = packet.payload.toString();
+            let newState = JSON.parse(packet.payload.toString());
             logger.trace('read chargeState %s', newState);
             handler.setCharging(newState);
             return;
