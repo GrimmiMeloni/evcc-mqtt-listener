@@ -1,3 +1,4 @@
+//@ts-check
 const mqtt = require('mqtt');
 const { logger } = require('./logger.js');
 const { mqtt_url, chargeModeTopic, chargeStateTopic } = require("./config");

@@ -1,3 +1,4 @@
+//@ts-check
 const { logger } = require('./logger.js');
 
 const MODE = {
@@ -27,7 +28,7 @@ class Handler {
     }
 
     toString() {
-        return 'currentChargeMode: %s, currentChargeState: %s, currentBatteryState: %s', this.currentChargeMode, this.currentChargeState, this.currentBatteryState;
+        return `currentChargeMode: ${this.currentChargeMode}, currentChargeState: ${this.currentChargeState}, currentBatteryState: ${this.currentBatteryState}`;
     }
 
     setChargeMode(newMode) {

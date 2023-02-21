@@ -1,3 +1,4 @@
+//@ts-check
 const { logger } = require('./logger.js');
 const config = require('config');
 
@@ -107,7 +108,7 @@ class TeslaAPI {
         const rc = json.response.code;
         logger.debug("response code for battery percentage update is %d", rc);
         
-        if (rc != 201) log.error ("Battery reserve perceentage update failed");
+        if (rc != 201) logger.error ("Battery reserve perceentage update failed");
     }
     
     setBackupOnlyMode() {

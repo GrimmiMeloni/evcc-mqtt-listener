@@ -1,3 +1,4 @@
+//@ts-check
 const config = require('config');
 
 const mqtt_url = config.get('mqtt.broker.url');
