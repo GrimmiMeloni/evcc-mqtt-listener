@@ -4,7 +4,7 @@ const { logger } = require('./logger.js');
 const MODE = {
     MODE_OFF: 'off',
     MODE_PV: 'pv',
-    MODE_MINPV: 'minPv',
+    MODE_MINPV: 'minpv',
     MODE_NOW: 'now'
 }
 
@@ -83,11 +83,11 @@ class Handler {
         switch (this.currentChargeMode) {
             case MODE.MODE_OFF:
             case MODE.MODE_PV:
+            case MODE.MODE_MINPV:
                 logger.debug("charge mode is %s, setting battery to standby", this.currentChargeMode);
                 this.setBatteryState(BATTERY_STATE.STANDBY);
                 break;
 
-            case MODE.MODE_MINPV:
             case MODE.MODE_NOW:
                 logger.debug("charge mode is %s, setting battery to backup only", this.currentChargeMode);
                 this.setBatteryState(BATTERY_STATE.BACKUP);
