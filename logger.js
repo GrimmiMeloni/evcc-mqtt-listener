@@ -4,7 +4,10 @@ const pino = require('pino');
 // const logger = pino();
 const logger = pino.pino({
     transport: {
-        target: 'pino-pretty'
+        target: 'pino-pretty',
+        options: {
+            translateTime: 'SYS:standard'
+        }
     }
 })
 
