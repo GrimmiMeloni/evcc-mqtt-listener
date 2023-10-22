@@ -9,3 +9,6 @@ exports.chargeModeTopic = chargeModeTopic;
 
 const chargeStateTopic = config.get('mqtt.topics.charging');
 exports.chargeStateTopic = chargeStateTopic;
+
+const plannerActiveTopic = config.get('mqtt.topics.plannerActive');
+exports.plannerActiveTopic = plannerActiveTopic;

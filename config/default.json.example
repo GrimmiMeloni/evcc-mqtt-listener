@@ -5,7 +5,8 @@
       },
       "topics": {
         "charging": "evcc/loadpoints/1/charging",
-        "mode": "evcc/loadpoints/1/mode"
+        "mode": "evcc/loadpoints/1/mode",
+        "plannerActive": "evcc/loadpoints/1/planActive"
       }
     },
     "tesla": {

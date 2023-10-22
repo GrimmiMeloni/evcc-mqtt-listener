@@ -24,11 +24,12 @@ class Handler {
         this.currentChargeMode = 'UNKNOWN';
         this.currentChargeState = false;
         this.currentBatteryState = 'UNKNOWN';
+        this.plannerActive = false;
         this.teslaApi = teslaApi;
     }
 
     toString() {
-        return `currentChargeMode: ${this.currentChargeMode}, currentChargeState: ${this.currentChargeState}, currentBatteryState: ${this.currentBatteryState}`;
+        return `currentChargeMode: ${this.currentChargeMode}, currentChargeState: ${this.currentChargeState}, currentBatteryState: ${this.currentBatteryState}, plannerActive: ${this.plannerActive}`;
     }
 
     setChargeMode(newMode) {
@@ -59,6 +60,22 @@ class Handler {
         return this.currentChargeState;
     }
 
+    setPlannerActive(newValue) {
+        if (this.plannerActive == newValue) {
+            logger.trace("skipping plannerActive update, state stays at %s", this.plannerActive);
+            return; //NoOp
+        }
+
+        logger.debug("updating plannerActive from %s to %s", this.plannerActive, newValue);
+        this.plannerActive = newValue;
+
+        this.update();
+    }
+
+    isPlannerActive() {
+        return this.plannerActive
+    }
+
 
     setBatteryState(newState) {
         if (this.currentBatteryState == newState) {
@@ -82,10 +99,19 @@ class Handler {
 
         switch (this.currentChargeMode) {
             case MODE.MODE_OFF:
-            case MODE.MODE_PV:
             case MODE.MODE_MINPV:
                 logger.debug("charge mode is %s, setting battery to standby", this.currentChargeMode);
                 this.setBatteryState(BATTERY_STATE.STANDBY);
+                break;
+
+            case MODE.MODE_PV:
+                if (this.isPlannerActive() == false) {   
+                    logger.debug("charge mode is %s, planner is not active, setting battery to standby", this.currentChargeMode);
+                    this.setBatteryState(BATTERY_STATE.STANDBY);
+                } else {
+                    logger.debug("charge mode is %s, planner is active, setting battery to backup only", this.currentChargeMode);
+                    this.setBatteryState(BATTERY_STATE.BACKUP);
+                }
                 break;
 
             case MODE.MODE_NOW:

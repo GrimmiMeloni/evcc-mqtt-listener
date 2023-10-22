@@ -23,5 +23,8 @@
     "mqtt": "^4.3.7",
     "pino": "^8.10.0",
     "pino-pretty": "^9.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.7"
   }
 }

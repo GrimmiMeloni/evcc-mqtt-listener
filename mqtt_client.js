@@ -1,7 +1,7 @@
 //@ts-check
 const mqtt = require('mqtt');
 const { logger } = require('./logger.js');
-const { mqtt_url, chargeModeTopic, chargeStateTopic } = require("./config");
+const { mqtt_url, chargeModeTopic, chargeStateTopic, plannerActiveTopic } = require("./config");
 
 function connect(handler) {
     const client = mqtt.connect(mqtt_url);
@@ -24,6 +24,13 @@ function connect(handler) {
             logger.info("subscribed to %s", chargeStateTopic);
         });
 
+        client.subscribe(plannerActiveTopic, (err, granted) => {
+            if (err) {
+                logger.error(err, 'err');
+            }
+            logger.info("subscribed to %s", plannerActiveTopic);
+        });
+
     });
 
     // on receive message event, log the message to the console 
@@ -40,6 +47,13 @@ function connect(handler) {
             let newState = JSON.parse(packet.payload.toString());
             logger.trace('read chargeState %s', newState);
             handler.setCharging(newState);
+            return;
+        }
+
+        if (topic === plannerActiveTopic) {
+            let newState = JSON.parse(packet.payload.toString());
+            logger.trace('read plannerActive %s', newState);
+            handler.setPlannerActive(newState);
             return;
         }
     });
